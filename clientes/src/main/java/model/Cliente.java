@@ -22,7 +22,7 @@ public class Cliente {
 	@Column(nullable = false, length = 30)
 	private String cpf;
 
-	@Column
+	@Column(name = "data_cadastro")
 	private LocalDate dataCadastro;
 
 	public Long getId() {
