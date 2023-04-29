@@ -21,7 +21,7 @@ public class ClienteApplication {
 	
 	@Autowired ClienteRepository repository;
 	
-	@Bean
+	/*@Bean
 	public CommandLineRunner run() {
 		return args ->{
 			Cliente cliente = Cliente.builder().cpf("3456789654").nome("jose").build();
@@ -29,7 +29,7 @@ public class ClienteApplication {
 			
 			
 		};
-		}
+		}*/
 	
 	
 	public static void main(String[] args) {

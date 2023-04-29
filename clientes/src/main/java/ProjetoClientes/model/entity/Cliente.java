@@ -8,6 +8,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.br.CPF;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -27,9 +31,12 @@ public class Cliente {
 	private Long id;
 
 	@Column(nullable = false, length = 180)
+	@NotEmpty
 	private String nome;
 
 	@Column(nullable = false, length = 30)
+	@NotNull
+	@CPF
 	private String cpf;
 
 	@Column(name = "data_cadastro",updatable = false)
