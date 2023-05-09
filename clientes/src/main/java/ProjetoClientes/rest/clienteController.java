@@ -1,9 +1,12 @@
 package ProjetoClientes.rest;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +23,7 @@ import ProjetoClientes.model.repository.ClienteRepository;
 
 @RestController
 @RequestMapping("/api/clientes")
+@CrossOrigin("http://localhost:4200")
 public class clienteController {
 	
 	private ClienteRepository repository;
@@ -29,6 +33,13 @@ public class clienteController {
 	@Autowired
 	public clienteController(ClienteRepository repository) {
 		this.repository = repository;
+	}
+	
+	@GetMapping
+	public List<Cliente> listarTodos(){
+		//metodo que retorna todos os clientes salvos
+		
+		return repository.findAll();
 	}
 	
 	@PostMapping
