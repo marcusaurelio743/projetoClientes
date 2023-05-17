@@ -1,0 +1,60 @@
+package ProjetoClientes.rest;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+
+import ProjetoClientes.model.entity.Cliente;
+import ProjetoClientes.model.entity.ServicoPrestado;
+import ProjetoClientes.model.repository.ClienteRepository;
+import ProjetoClientes.model.repository.ServicoPrestadoRepository;
+import ProjetoClientes.rest.dto.ServicoPrestadoDto;
+
+@RestController
+@RequestMapping("api/servicos-prestados")
+public class ServicoPrestadoController {
+	
+	private final ClienteRepository clienteRepository;
+	private final ServicoPrestadoRepository servicoPrestadoRepository;
+	
+	public ServicoPrestadoController(ClienteRepository clienteRepository,
+			ServicoPrestadoRepository servicoPrestadoRepository) {
+		this.clienteRepository = clienteRepository;
+		this.servicoPrestadoRepository = servicoPrestadoRepository;
+	}
+
+
+
+	@PostMapping
+	public ServicoPrestado salvar(@RequestBody ServicoPrestadoDto dto) {
+		//formatando a data usando a api LocalDate
+		LocalDate data = LocalDate.parse(dto.getData(),DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+		
+		Long clienteId = dto.getIdcliente();
+		
+		/*metodo busca um cliente no banco de dados e caso não encontre e chamado um erro via http informando que o
+		cliente não existe no banco esse tratamento é feito pois agente so busca o id do cliente pela tela e presisamos do
+		objeto cliente para fazer a relação cliente e serviço da regra de negocio*/
+		Cliente cliente = 
+				clienteRepository
+				.findById(clienteId)
+				.orElseThrow(() ->new ResponseStatusException(HttpStatus.BAD_REQUEST,"cliente Inesistente"));
+		//=============================================================================================================
+		
+		ServicoPrestado servicoPrestado = new ServicoPrestado();
+		servicoPrestado.setDescicao(dto.getDescricao());
+		servicoPrestado.setData(data);
+		servicoPrestado.setCliente(cliente);
+		servicoPrestado.setValor(BigDecimal.valueOf(Double.valueOf(dto.getPreco())));
+		return null;
+	}
+
+}

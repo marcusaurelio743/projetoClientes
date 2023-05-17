@@ -10,9 +10,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import ProjetoClientes.model.entity.Cliente;
-import ProjetoClientes.model.entity.Servico;
+import ProjetoClientes.model.entity.ServicoPrestado;
 import ProjetoClientes.model.repository.ClienteRepository;
-import ProjetoClientes.model.repository.ServicoRepository;
+import ProjetoClientes.model.repository.ServicoPrestadoRepository;
 
 
 

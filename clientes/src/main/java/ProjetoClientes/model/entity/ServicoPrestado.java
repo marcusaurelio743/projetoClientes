@@ -1,6 +1,7 @@
 package ProjetoClientes.model.entity;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -15,7 +16,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Servico {
+public class ServicoPrestado {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +32,8 @@ public class Servico {
 	@Column
 	private BigDecimal valor;
 	
-	
+	@Column
+	private LocalDate data;
 	
 	
 
