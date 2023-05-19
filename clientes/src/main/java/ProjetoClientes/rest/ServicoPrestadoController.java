@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -17,6 +18,7 @@ import ProjetoClientes.model.entity.ServicoPrestado;
 import ProjetoClientes.model.repository.ClienteRepository;
 import ProjetoClientes.model.repository.ServicoPrestadoRepository;
 import ProjetoClientes.rest.dto.ServicoPrestadoDto;
+import ProjetoClientes.util.BigDecimalConverter;
 
 @RestController
 @RequestMapping("api/servicos-prestados")
@@ -24,16 +26,24 @@ public class ServicoPrestadoController {
 	
 	private final ClienteRepository clienteRepository;
 	private final ServicoPrestadoRepository servicoPrestadoRepository;
+	private final BigDecimalConverter converter;
 	
+	
+
 	public ServicoPrestadoController(ClienteRepository clienteRepository,
-			ServicoPrestadoRepository servicoPrestadoRepository) {
+			ServicoPrestadoRepository servicoPrestadoRepository, BigDecimalConverter converter) {
+		
 		this.clienteRepository = clienteRepository;
 		this.servicoPrestadoRepository = servicoPrestadoRepository;
+		this.converter = converter;
 	}
 
 
 
+
+
 	@PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
 	public ServicoPrestado salvar(@RequestBody ServicoPrestadoDto dto) {
 		//formatando a data usando a api LocalDate
 		LocalDate data = LocalDate.parse(dto.getData(),DateTimeFormatter.ofPattern("dd/MM/yyyy"));
@@ -53,8 +63,9 @@ public class ServicoPrestadoController {
 		servicoPrestado.setDescicao(dto.getDescricao());
 		servicoPrestado.setData(data);
 		servicoPrestado.setCliente(cliente);
-		servicoPrestado.setValor(BigDecimal.valueOf(Double.valueOf(dto.getPreco())));
-		return null;
+		servicoPrestado.setValor(converter.converter(dto.getPreco()));
+		
+		return servicoPrestadoRepository.save(servicoPrestado);
 	}
 
 }

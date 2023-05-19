@@ -6,9 +6,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class BigDecimalConverter {
 	public BigDecimal converter(String value) {
+		if(value== null ) {
+			return null;
+		}
 		value = value.replace(".", "").replace(",", ".");
-		//return BigDecimal(value);
-		return null;
+		
+		
+		return new BigDecimal(value);
 	}
 
 }
