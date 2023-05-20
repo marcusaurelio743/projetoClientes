@@ -3,12 +3,15 @@ package ProjetoClientes.rest;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -25,7 +28,7 @@ import ProjetoClientes.util.BigDecimalConverter;
 public class ServicoPrestadoController {
 	
 	private final ClienteRepository clienteRepository;
-	private final ServicoPrestadoRepository servicoPrestadoRepository;
+	private final ServicoPrestadoRepository repository;
 	private final BigDecimalConverter converter;
 	
 	
@@ -34,7 +37,7 @@ public class ServicoPrestadoController {
 			ServicoPrestadoRepository servicoPrestadoRepository, BigDecimalConverter converter) {
 		
 		this.clienteRepository = clienteRepository;
-		this.servicoPrestadoRepository = servicoPrestadoRepository;
+		this.repository = servicoPrestadoRepository;
 		this.converter = converter;
 	}
 
@@ -65,7 +68,19 @@ public class ServicoPrestadoController {
 		servicoPrestado.setCliente(cliente);
 		servicoPrestado.setValor(converter.converter(dto.getPreco()));
 		
-		return servicoPrestadoRepository.save(servicoPrestado);
+		return repository.save(servicoPrestado);
+	}
+	
+	@GetMapping
+	public List<ServicoPrestado> pesquisar(
+			//declarando paramentos para pesquisa nesse caso não é obrigatório 
+			@RequestParam(value ="nome",required = false,defaultValue = "") String nome,
+			@RequestParam(value = "mes",required = false) Integer mes
+			
+			){
+		
+		return repository.findByNomeClienteAndMes("%"+nome+"%",mes); 
+		
 	}
 
 }
