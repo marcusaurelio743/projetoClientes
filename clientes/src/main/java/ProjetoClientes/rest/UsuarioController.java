@@ -8,9 +8,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import ProjetoClientes.model.entity.Usuario;
 import ProjetoClientes.model.repository.UsuarioRepository;
+import ProjetoClientes.service.UsuarioService;
+import ProjetoClientes.util.UsuarioCadastradoExeption;
 import lombok.RequiredArgsConstructor;
 
 
@@ -19,13 +22,18 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UsuarioController {
 	
-	private final UsuarioRepository repository;
+	private UsuarioService service;
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public void salvar(@RequestBody @Valid Usuario usuario) {
 		
-		repository.save(usuario);
+		try {
+			service.salvar(usuario);
+		}catch (UsuarioCadastradoExeption e) {
+			
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,e.getMessage());
+		}
 	}
 
 }
