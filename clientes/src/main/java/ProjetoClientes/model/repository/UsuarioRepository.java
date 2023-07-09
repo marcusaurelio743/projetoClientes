@@ -11,6 +11,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 	Optional<Usuario> findBylogin(String login);
 	
 	//select count(*)>0 from usuario where login = :login
-	boolean existsByUsername(String login);
+	boolean existsByLogin(String login);
 
 }
